@@ -34,7 +34,7 @@
                     <router-link href="javascript:;" class="btn btn--m" to="/">商品列表</router-link>
                 </div>
                 <div class="btn-r-wrap" style="width:33%">
-                    <router-link href="javascript:;" class="btn btn--m" to="/">订单列表</router-link>
+                    <router-link href="javascript:;" class="btn btn--m" to="/orderList">订单列表</router-link>
                 </div>
                 </div>
             </div>

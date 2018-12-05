@@ -18,7 +18,8 @@
                 <!--<a href="/" class="navbar-link">我的账户</a>-->
                 <span class="navbar-link" v-if="nickName">{{nickName}}</span>
                 <a href="javascript:void(0)" class="navbar-link"  @click="showModel(true)" v-if="!nickName">登录</a>
-                <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logout()">注销</a>
+                <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="logout()" style="margin-right:20px;" >注销</a>
+                <router-link to="/orderList" v-if="nickName">我的订单</router-link>
                 <div class="navbar-cart-container">
                 <span class="navbar-cart-count" v-if="cartCount>0">{{cartCount}}</span>
                 <a class="navbar-link navbar-cart-link" @click="toCart">

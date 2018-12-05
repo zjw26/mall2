@@ -474,7 +474,8 @@ router.post('/payment',function(req,res,next){
         "orderStatus" : 1,
         "createDate" : createDate,
         "goodsList" : goodsList,
-        "addressInfo" : address
+        "addressInfo" : address,
+        "assess":''
       }
 
       doc.orderList.push(order);
@@ -502,6 +503,132 @@ router.post('/payment',function(req,res,next){
     }
   })
 
+})
+
+router.get('/orderList',function(req,res,next){
+  var userId = req.cookies.userId;
+  // var orderId = req.param('orderId');
+  User.findOne({userId:userId},function(err,userDoc){
+    if(err){
+      res.json({
+        status:'1',
+        msg:err.message,
+        result:''
+      })
+    }else{
+      if(userDoc){
+        let doc = userDoc.toObject();
+        let orderTotal = '';
+        if(doc.orderList.length>0){
+            res.json({
+              status:'0',
+              msg:'查询成功',
+              result:doc.orderList
+            })
+        }else{
+          res.json({
+            status:'12001',
+            msg:'当前用户无订单',
+            result:''
+          })
+        }
+      }
+    }
+  })
+})
+
+router.post('/assess',function(req,res,next){
+  var userId = req.cookies.userId;
+  var orderId = req.param('orderId');
+  var assess = req.param('assess');
+  
+  User.findOne({userId:userId},function(err,userDoc){
+    if(err){
+      res.json({
+        status:'1',
+        msg:err.message,
+        result:''
+      })
+    }else{
+      if(userDoc){
+        let doc = userDoc.toObject();
+        if(doc.orderList.length>0){
+          doc.orderList.forEach((item)=>{
+            if(item.orderId == orderId){
+              item.assess = assess;
+              console.log(item)
+            }
+          })
+          console.log(assess,orderId)
+          User.update({userId:userId},{'orderList':doc.orderList},function(err,doc2){
+            if(err){
+              res.json({
+                status:'1',
+                msg:err.message,
+                result:''
+              })
+            }else{
+              res.json({
+                status:'0',
+                msg:'评价成功',
+                result:''
+              })
+            }
+          })
+            
+        }else{
+          res.json({
+            status:'1',
+            msg:'评价失败',
+            result:''
+          })
+        }
+        
+
+
+      }
+    }
+  })
+})
+
+router.get('/orderDetailAll',function(req,res,next){
+  var userId = req.cookies.userId;
+  var orderId = req.param('orderId');
+  User.findOne({userId:userId},function(err,userDoc){
+    if(err){
+      res.json({
+        status:'1',
+        msg:err.message,
+        result:''
+      })
+    }else{
+      if(userDoc){
+        let doc = userDoc.toObject();
+        if(doc.orderList.length>0){
+          doc.orderList.forEach((item)=>{
+            if(item.orderId == orderId){
+              res.json({
+                status:'0',
+                msg:'查询成功',
+                result:item
+              })
+            }
+          })
+          
+          
+        }else{
+          res.json({
+            status:'12001',
+            msg:'当前用户无订单',
+            result:''
+          })
+        }
+        
+
+
+      }
+    }
+  })
 })
 
 //查询订单信息
